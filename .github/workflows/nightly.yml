@@ -80,7 +80,6 @@ jobs:
 
     steps:
       - name: Send Slack notifications for failing tests
-        uses: ./.github/actions/make_init
         uses: ./.github/actions/slack_notifications
         with:
           python_result: ${{ needs.run-python-tests.result }}
