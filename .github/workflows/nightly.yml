@@ -59,9 +59,9 @@ jobs:
     needs: create-nightly-tag
     uses: ./.github/workflows/python-versions.yml
 
-  run-javascript-tests:
-    needs: create-nightly-tag
-    uses: ./.github/workflows/js-tests.yml
+  # run-javascript-tests:
+  #   needs: create-nightly-tag
+  #   uses: ./.github/workflows/js-tests.yml
 
   # run-py-prod-deps-smoke-test:
   #   needs: create-nightly-tag
@@ -75,7 +75,7 @@ jobs:
     runs-on: ubuntu-latest
 
     if: ${{ always() }}
-    needs: [run-python-tests, run-javascript-tests]
+    needs: [run-python-tests]
     # needs: [run-python-tests, run-javascript-tests, run-py-prod-deps-smoke-test, run-cypress-tests]
 
     steps:
@@ -85,10 +85,12 @@ jobs:
           persist-credentials: false
           submodules: 'recursive'
       - name: Send Slack notifications for failing tests
+        env:
+          SLACK_WEBHOOK: ${{ secrets.TEST_SLACK_WEBHOOK }}
         uses: ./.github/actions/slack_notifications
         with:
           python_result: ${{ needs.run-python-tests.result }}
-          javascript_result: ${{ needs.run-javascript-tests.result }}
+      #     javascript_result: ${{ needs.run-javascript-tests.result }}
       #     py_prod_deps_result: ${{ needs.run-py-prod-deps-smoke-test.result }}
       #     cypress_result: ${{ needs.run-cypress-tests.result }}
   

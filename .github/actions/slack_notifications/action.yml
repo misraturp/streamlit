@@ -3,34 +3,25 @@ name: "Slack Notification for Test Failures"
 inputs:
   python_result:
     description: 'Python Test Result'
-  javascript_result:
-    description: 'Javascript Test Result'
+  # javascript_result:
+  #   description: 'Javascript Test Result'
   # py_prod_deps_result:
   #   description: 'Python Prod Deps Test Result'
   # cypress_result:
   #   description: 'Cypress Test Result'
 
-env:
-  SLACK_WEBHOOK: ${{ secrets.TEST_SLACK_WEBHOOK }}
-
 runs:
   using: composite
   steps:
-    - if: ${{ inputs.python_result == 'success' && inputs.python_result == 'success' }}
-      # env:
-      #   SLACK_WEBHOOK: ${{ secrets.TEST_SLACK_WEBHOOK }}
+    - if: ${{ inputs.python_result == 'success' }}
       run: |
         curl -X POST -H 'Content-type: application/json' --data '{"text":"TESTING :white_check_mark: Nightly build tests passed!"}' "$SLACK_WEBHOOK"
       shell: bash -ileo pipefail {0}
     - if: ${{ inputs.python_result == 'failure' }}
-      # env:
-      #   SLACK_WEBHOOK: ${{ secrets.TEST_SLACK_WEBHOOK }}
       run: |
         curl -X POST -H 'Content-type: application/json' --data '{"text":"TESTING :blobonfire: Nightly build failed on python tests"}' "$SLACK_WEBHOOK"
       shell: bash -ileo pipefail {0}
     - if: ${{ inputs.javascript_result == 'failure' }}
-      # env:
-      #   SLACK_WEBHOOK: ${{ secrets.TEST_SLACK_WEBHOOK }}
       run: |
         curl -X POST -H 'Content-type: application/json' --data '{"text":"TESTING :blobonfire: Nightly build failed on javascript tests"}' "$SLACK_WEBHOOK"
       shell: bash -ileo pipefail {0}
