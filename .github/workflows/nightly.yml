@@ -79,6 +79,11 @@ jobs:
     # needs: [run-python-tests, run-javascript-tests, run-py-prod-deps-smoke-test, run-cypress-tests]
 
     steps:
+      - name: Checkout Streamlit code
+        uses: actions/checkout@v3
+        with: 
+          persist-credentials: false
+          submodules: 'recursive'
       - name: Send Slack notifications for failing tests
         uses: ./.github/actions/slack_notifications
         with:
