@@ -73,13 +73,13 @@ jobs:
 
   test-status-notification:
     runs-on: ubuntu-latest
+
+    if: ${{ always() }}
     needs: [run-python-tests, run-javascript-tests]
     # needs: [run-python-tests, run-javascript-tests, run-py-prod-deps-smoke-test, run-cypress-tests]
 
-    
     steps:
-      - if: always()
-        name: Send Slack notifications for failing tests
+      - name: Send Slack notifications for failing tests
         uses: ./.github/actions/slack_notifications
         with:
           python_result: ${{ needs.run-python-tests.result }}
