@@ -72,13 +72,17 @@ jobs:
   #   uses: ./.github/workflows/cypress.yml
 
   test-failure-notification:
+    runs-on: ubuntu-latest
     needs: [run-python-tests, run-javascript-tests, run-py-prod-deps-smoke-test, run-cypress-tests]
-    uses: ./.github/actions/slack_notifications
-    with:
-      python_result: ${{ needs.run-python-tests.result }}
-      javascript_result: ${{ needs.run-javascript-tests.result }}
-  #     py_prod_deps_result: ${{ needs.run-py-prod-deps-smoke-test.result }}
-  #     cypress_result: ${{ needs.run-cypress-tests.result }}
+    
+    steps:
+      - name: Send Slack notifications for failing tests
+        uses: ./.github/actions/slack_notifications
+        with:
+          python_result: ${{ needs.run-python-tests.result }}
+          javascript_result: ${{ needs.run-javascript-tests.result }}
+      #     py_prod_deps_result: ${{ needs.run-py-prod-deps-smoke-test.result }}
+      #     cypress_result: ${{ needs.run-cypress-tests.result }}
   
   # create-nightly-build:
   #   runs-on: ubuntu-latest
