@@ -56,11 +56,11 @@ jobs:
   #         git push origin $TAG
 
   run-python-tests:
-    needs: create-nightly-tag
+  #   needs: create-nightly-tag
     uses: ./.github/workflows/python-versions.yml
 
   run-javascript-tests:
-    needs: create-nightly-tag
+  #   needs: create-nightly-tag
     uses: ./.github/workflows/js-tests.yml
 
   # run-py-prod-deps-smoke-test:
@@ -73,7 +73,9 @@ jobs:
 
   test-failure-notification:
     runs-on: ubuntu-latest
-    needs: [run-python-tests, run-javascript-tests, run-py-prod-deps-smoke-test, run-cypress-tests]
+    needs: [run-python-tests, run-javascript-tests]
+    # needs: [run-python-tests, run-javascript-tests, run-py-prod-deps-smoke-test, run-cypress-tests]
+
     
     steps:
       - name: Send Slack notifications for failing tests
