@@ -11,19 +11,19 @@ on:
       - '**'
 
 jobs:
-  # create-nightly-tag:
-  #   runs-on: ubuntu-latest
+  create-nightly-tag:
+    runs-on: ubuntu-latest
 
-  #   defaults:
-  #     run:
-  #       shell: bash -ileo pipefail {0}
+    defaults:
+      run:
+        shell: bash -ileo pipefail {0}
 
-  #   steps:
-  #     - name: Checkout Streamlit code
-  #       uses: actions/checkout@v3
-  #       with: 
-  #         persist-credentials: false
-  #         submodules: 'recursive'
+    steps:
+      - name: Checkout Streamlit code
+        uses: actions/checkout@v3
+        with: 
+          persist-credentials: false
+          submodules: 'recursive'
   #     - name: Set up Python 3.10
   #       uses: actions/setup-python@v4
   #       with:
@@ -56,11 +56,11 @@ jobs:
   #         git push origin $TAG
 
   run-python-tests:
-  #   needs: create-nightly-tag
+    needs: create-nightly-tag
     uses: ./.github/workflows/python-versions.yml
 
   run-javascript-tests:
-  #   needs: create-nightly-tag
+    needs: create-nightly-tag
     uses: ./.github/workflows/js-tests.yml
 
   # run-py-prod-deps-smoke-test:
@@ -80,6 +80,7 @@ jobs:
 
     steps:
       - name: Send Slack notifications for failing tests
+        uses: ./.github/actions/make_init
         uses: ./.github/actions/slack_notifications
         with:
           python_result: ${{ needs.run-python-tests.result }}
