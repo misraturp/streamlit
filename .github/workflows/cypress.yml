@@ -65,7 +65,7 @@ jobs:
           CURRENT_RUN: ${{ matrix.specs }}
           TOTAL_RUNS: ${{ strategy.job-total }}
         run: |
-          FILE_LIST=$(python scripts/create_matrix_interval.py $TOTAL_RUNS $CURRENT_RUN)
+          FILE_LIST=$(python scripts/create_matrix_file_list.py $TOTAL_RUNS $CURRENT_RUN)
           echo "Specs tested in this job:"
           echo "$FILE_LIST"
           scripts/run_e2e_tests.py -a "$FILE_LIST"

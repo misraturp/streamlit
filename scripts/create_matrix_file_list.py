@@ -43,9 +43,9 @@ def create_file_list():
 
     current_files = all_files[start_index:stop_index]
 
-    file_list = " ".join(current_files)
+    # file_list = " ".join(current_files)
 
-    return file_list
+    return current_files
 
 
 def main():
