@@ -61,18 +61,14 @@ jobs:
         run: |
           sudo apt install -y xvfb libgtk2.0-0 libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2 jq curl
       - name: Cypress Tests
-        run: |
-          js_specs=(e2e/specs/*)
-          # get how many specs to be split up into 21 runs
-          (( interval=(${#js_specs[@]}+21-1)/21 ))
-          (( startIndex = (${MATRIX_SPECS} - 1) * ${interval} ))
-          echo "Specs tested in this job:"
-          echo "${js_specs[@]:${startIndex}:${interval}}"
-          scripts/run_e2e_tests.py -a "${js_specs[@]:${startIndex}:${interval}}"
-        shell: bash -iluo pipefail {0}
-        # ^ different shell config needed for cypress tests -e flag causes 1st batch to fail every time
         env:
-            MATRIX_SPECS: ${{matrix.specs}}
+          CURRENT_RUN: ${{ matrix.specs }}
+          TOTAL_RUNS: ${{ strategy.job-total }}
+        run: |
+          FILE_LIST=$(python scripts/create_matrix_interval.py $TOTAL_RUNS $CURRENT_RUN)
+          echo "Specs tested in this job:"
+          echo "$FILE_LIST"
+          scripts/run_e2e_tests.py -a "$FILE_LIST"
       - name: Store Videos
         uses: actions/upload-artifact@v3
         if: always()
