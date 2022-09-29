@@ -21,7 +21,9 @@ import sys
 import run_e2e_tests
 
 # Directory for cypress test specs
-CYPRESS_DIR = "../e2e/specs"
+CYPRESS_DIR = "e2e/specs"
+# Path relative to FE
+FILE_PATH = "../e2e/specs"
 
 
 def create_file_list():
@@ -30,7 +32,7 @@ def create_file_list():
     spec_dir = os.path.abspath(CYPRESS_DIR)
     sorted_files = sorted(os.listdir(spec_dir))
     # ultimately need the files in e2e/specs/<file_name>.js format to run tests
-    all_files = [os.path.join(CYPRESS_DIR, file_name) for file_name in sorted_files]
+    all_files = [os.path.join(FILE_PATH, file_name) for file_name in sorted_files]
     file_count = len(all_files)
 
     # calculate how many specs in each run
@@ -48,7 +50,7 @@ def create_file_list():
 
     file_list = " ".join(current_files)
 
-    return current_files
+    return file_list
 
 
 def main():

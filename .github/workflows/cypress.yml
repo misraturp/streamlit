@@ -65,9 +65,10 @@ jobs:
           CURRENT_RUN: ${{ matrix.specs }}
           TOTAL_RUNS: ${{ strategy.job-total }}
         run: |
-          RESULTS=($(python scripts/create_matrix_file_list.py $TOTAL_RUNS $CURRENT_RUN | tr '[],' ' '))
+          RESULTS=$(python scripts/create_matrix_file_list.py $TOTAL_RUNS $CURRENT_RUN)
           echo "$RESULTS"
-          scripts/run_e2e_tests.py -a "$RESULTS"
+          echo "${RESULTS[@]}"
+          scripts/run_e2e_tests.py -a "${RESULTS[@]}"
       - name: Store Videos
         uses: actions/upload-artifact@v3
         if: always()
