@@ -53,8 +53,7 @@ def main():
     """Run main loop."""
 
     files = create_file_list()
-    for file in files:
-        print(file)
+    print(files)
 
 
 if __name__ == "__main__":
