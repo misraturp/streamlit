@@ -27,7 +27,9 @@ def create_file_list():
     """Create the list of files for a given matrix input"""
 
     spec_dir = os.path.abspath(CYPRESS_DIR)
-    all_files = sorted(os.listdir(spec_dir))
+    sorted_files = sorted(os.listdir(spec_dir))
+    # ultimately need the files in e2e/specs/<file_name>.js format to run tests
+    all_files = [os.path.join(CYPRESS_DIR, file_name) for file_name in sorted_files]
     file_count = len(all_files)
 
     # calculate how many specs in each run
@@ -43,7 +45,7 @@ def create_file_list():
 
     current_files = all_files[start_index:stop_index]
 
-    # file_list = " ".join(current_files)
+    file_list = " ".join(current_files)
 
     return current_files
 
