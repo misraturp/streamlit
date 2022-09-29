@@ -39,7 +39,7 @@ COMPONENT_TEMPLATE_DIRS = {
 }
 
 CREDENTIALS_FILE = os.path.expanduser("~/.streamlit/credentials.toml")
-IS_CIRCLECI = os.getenv("CIRCLECI")
+# IS_CIRCLECI = os.getenv("CIRCLECI") or os.getenv("CURRENT_RUN")
 
 
 class QuitException(BaseException):
