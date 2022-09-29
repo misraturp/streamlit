@@ -21,7 +21,7 @@ import sys
 import run_e2e_tests
 
 # Directory for cypress test specs
-CYPRESS_DIR = "e2e/specs"
+CYPRESS_DIR = "../e2e/specs"
 
 
 def create_file_list():
@@ -48,7 +48,7 @@ def create_file_list():
 
     file_list = " ".join(current_files)
 
-    return [start_index, interval, all_files]
+    return current_files
 
 
 def main():
