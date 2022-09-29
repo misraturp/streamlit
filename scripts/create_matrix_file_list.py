@@ -18,6 +18,7 @@
 import math
 import os
 import sys
+import run_e2e_tests
 
 # Directory for cypress test specs
 CYPRESS_DIR = "e2e/specs"
@@ -45,8 +46,6 @@ def create_file_list():
 
     current_files = all_files[start_index:stop_index]
 
-    file_list = " ".join(current_files)
-
     return current_files
 
 
@@ -54,7 +53,8 @@ def main():
     """Run main loop."""
 
     files = create_file_list()
-    print(files)
+    for file in files:
+        print(file)
 
 
 if __name__ == "__main__":
