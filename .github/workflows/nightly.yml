@@ -4,6 +4,7 @@ on:
   # schedule:
   #   # Run job at 10.30pm PST or 11.30pm PDT
   #   - cron:  '30 6 * * *'
+  workflow_dispatch:
 
 jobs:
   create-nightly-tag:
@@ -77,11 +78,11 @@ jobs:
     with:
       ref: ${{needs.create-nightly-tag.outputs.tag}}
 
-  run-cypress-tests:
-    needs: create-nightly-tag
-    uses: ./.github/workflows/cypress.yml
-    with:
-      ref: ${{needs.create-nightly-tag.outputs.tag}}
+  # run-cypress-tests:
+  #   needs: create-nightly-tag
+  #   uses: ./.github/workflows/cypress.yml
+  #   with:
+  #     ref: ${{needs.create-nightly-tag.outputs.tag}}
 
   test-status-notification:
     runs-on: ubuntu-latest
@@ -89,7 +90,7 @@ jobs:
     if: ${{ always() }}
     # By default, jobs listed in needs must all complete successfully for the dependent job to run. always() conditional
     # added as we'd like this job to run whether or not tests pass & slack us regarding failing tests.
-    needs: [run-python-tests, run-javascript-tests, run-py-prod-deps-smoke-test, run-cypress-tests]
+    needs: [run-python-tests, run-javascript-tests, run-py-prod-deps-smoke-test]
 
     env:
       SLACK_WEBHOOK: ${{ secrets.TEST_SLACK_WEBHOOK }}
@@ -101,14 +102,14 @@ jobs:
         run: python scripts/slack_notifications.py js
       - if: ${{ needs.run-py-prod-deps-smoke-test.result == 'failure' }}
         run: python scripts/slack_notifications.py py_prod
-      - if: ${{ needs.run-cypress-tests.result == 'failure' }}
-        run: python scripts/slack_notifications.py cypress
+      # - if: ${{ needs.run-cypress-tests.result == 'failure' }}
+      #   run: python scripts/slack_notifications.py cypress
   
   create-nightly-build:
     runs-on: ubuntu-latest
 
     # Tag creation & tests must all complete successfully for nightly build job to run. 
-    needs: [create-nightly-tag, run-python-tests, run-javascript-tests, run-py-prod-deps-smoke-test, run-cypress-tests]
+    needs: [create-nightly-tag, run-python-tests, run-javascript-tests, run-py-prod-deps-smoke-test]
 
     defaults:
       run:
