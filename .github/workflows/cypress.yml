@@ -65,11 +65,11 @@ jobs:
           CURRENT_RUN: ${{ matrix.specs }}
           TOTAL_RUNS: ${{ strategy.job-total }}
         run: |
-          FILE_LIST=$(python scripts/create_matrix_file_list.py $TOTAL_RUNS $CURRENT_RUN)
-          read FILE_ARGS <<< $FILE_LIST
-          echo "Specs tested in this job:"
-          echo "$FILE_ARGS"
-          scripts/run_e2e_tests.py -a "${FILE_ARGS[@]}"
+          RESULTS=$(python scripts/create_matrix_file_list.py $TOTAL_RUNS $CURRENT_RUN)
+          startIndex=$RESULTS[0]
+          interval=$RESULTS[1]
+          allFiles=$RESULTS[2]
+          scripts/run_e2e_tests.py -a "${allFiles[@]:${startIndex}:${interval}}"
       - name: Store Videos
         uses: actions/upload-artifact@v3
         if: always()
