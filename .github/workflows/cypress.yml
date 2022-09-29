@@ -69,7 +69,7 @@ jobs:
           read FILE_ARGS <<< $FILE_LIST
           echo "Specs tested in this job:"
           echo "$FILE_ARGS"
-          scripts/run_e2e_tests.py -a "$FILE_ARGS"
+          scripts/run_e2e_tests.py -a "${FILE_ARGS[@]}"
       - name: Store Videos
         uses: actions/upload-artifact@v3
         if: always()
