@@ -1,11 +1,11 @@
 name: PR Preview
 
 on:
-  pull_request:
-    types: [opened]
-  push:
-    branches:
-      - '**'
+  # pull_request:
+  #   types: [opened]
+  # push:
+  #   branches:
+  #     - '**'
 
 # Avoid duplicate workflows on same branch
 concurrency: 

@@ -1,11 +1,11 @@
 name: Cypress Tests
 
 on:
-  pull_request:
-    types: [opened]
-  push:
-    branches:
-      - '**'
+  # pull_request:
+  #   types: [opened]
+  # push:
+  #   branches:
+  #     - '**'
   # Allows workflow to be called from other workflows
   workflow_call:
     inputs:
