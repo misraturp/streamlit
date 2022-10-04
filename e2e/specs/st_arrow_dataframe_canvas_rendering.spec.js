@@ -20,12 +20,13 @@ describe("Interactive DataFrame canvas rendering", () => {
     // dataframes and tables to be rendered.
     Cypress.config("defaultCommandTimeout", 30000);
 
+    cy.viewport(3000, 768)
     cy.loadApp("http://localhost:3000/");
     cy.prepForElementSnapshots();
   });
 
   it("shows widget correctly", () => {
-    cy.get(".stDataFrame").should("have.length", 29);
+    cy.get(".stDataFrame").should("have.length", 28);
 
     /** Since glide-data-grid uses HTML canvas for rendering the table we
     cannot run any tests based on the HTML DOM. Therefore, we only use snapshot
