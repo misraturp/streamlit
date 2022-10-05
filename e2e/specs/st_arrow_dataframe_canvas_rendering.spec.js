@@ -22,7 +22,9 @@ describe("Interactive DataFrame canvas rendering", () => {
 
     cy.viewport(3000, 768)
     cy.loadApp("http://localhost:3000/");
+    cy.viewport(3000, 768)
     cy.prepForElementSnapshots();
+    cy.viewport(3000, 768)
   });
 
   it("shows widget correctly", () => {
@@ -32,7 +34,7 @@ describe("Interactive DataFrame canvas rendering", () => {
     cannot run any tests based on the HTML DOM. Therefore, we only use snapshot
     matching to test that our table examples render correctly. In addition, glide-data-grid
     itself also has more advanced canvas based tests for some of the interactive features. */
-
+    cy.viewport(3000, 768)
     cy.get(".stDataFrame").each((el, idx) => {
       return cy.wrap(el).matchThemedSnapshots("data-grid-canvas-" + idx);
     });

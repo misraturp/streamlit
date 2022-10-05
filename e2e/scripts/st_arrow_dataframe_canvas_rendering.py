@@ -173,8 +173,8 @@ dft = pd.DataFrame(
         "float16": pd.array(np.random.rand(n_rows), dtype="float16"),
     }
 )
-
 st._arrow_dataframe(dft)
+
 dft = pd.DataFrame(
     {
         # Data time types
@@ -226,17 +226,13 @@ dft = pd.DataFrame(
             ],
             dtype="category",
         ),
-        # TODO: Sparse pandas data (column sparse) is not supported yet
-        # "sparse": sparse_data
-        # TODO: Duration type is not supported yet.
-        #   See: https://github.com/streamlit/streamlit/issues/4489
-        # "timedelta64":[np.timedelta64(i+1, 'h') for i in range(n_rows)],
     }
 )
 st._arrow_dataframe(dft)
 
 dft = pd.DataFrame(
     {
+        # List
         "list_string": [
             [
                 "".join(random.choice(chars) for _ in range(5))
@@ -252,9 +248,15 @@ dft = pd.DataFrame(
             [np.random.random() for _ in range(np.random.randint(0, 3))]
             for _ in range(n_rows)
         ],
+        # TODO: Sparse pandas data (column sparse) is not supported yet
+        # "sparse": sparse_data
+        # TODO: Duration type is not supported yet.
+        #   See: https://github.com/streamlit/streamlit/issues/4489
+        # "timedelta64":[np.timedelta64(i+1, 'h') for i in range(n_rows)],
     }
 )
 st._arrow_dataframe(dft)
+
 st.header("Missing data")
 df = pd.DataFrame(
     np.random.rand(5, 3),
