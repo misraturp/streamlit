@@ -173,7 +173,7 @@ dft = pd.DataFrame(
         "float16": pd.array(np.random.rand(n_rows), dtype="float16"),
     }
 )
-st._arrow_dataframe(dft)
+st._arrow_dataframe(dft, use_container_width=True)
 
 dft = pd.DataFrame(
     {
@@ -228,7 +228,7 @@ dft = pd.DataFrame(
         ),
     }
 )
-st._arrow_dataframe(dft)
+st._arrow_dataframe(dft, use_container_width=True)
 
 dft = pd.DataFrame(
     {
@@ -255,7 +255,7 @@ dft = pd.DataFrame(
         # "timedelta64":[np.timedelta64(i+1, 'h') for i in range(n_rows)],
     }
 )
-st._arrow_dataframe(dft)
+st._arrow_dataframe(dft, use_container_width=True)
 
 st.header("Missing data")
 df = pd.DataFrame(
