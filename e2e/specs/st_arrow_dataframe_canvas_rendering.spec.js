@@ -29,11 +29,6 @@ describe("Interactive DataFrame canvas rendering", () => {
   });
 
   it("shows widget correctly", () => {
-
-
-    cy.get('body').trigger('keydown', { keyCode: 82});
-    cy.wait(500);
-
     cy.viewport(3000, 768)
 
     cy.get(".stDataFrame").should("have.length", 28);
@@ -45,7 +40,10 @@ describe("Interactive DataFrame canvas rendering", () => {
     cy.viewport(3000, 768)
     cy.get("[data-testid=\"stDataFrameResizable\"]").each((el, idx) => {
       cy.viewport(3000, 768)
-      return cy.wrap(el).matchThemedSnapshots("data-grid-canvas-" + idx);
+      return cy.wrap(el).matchImageSnapshot(`data-grid-canvas-${idx}-dark`, {
+        ...options,
+        force: false,
+      })
     });
   });
 });
