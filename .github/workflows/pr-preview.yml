@@ -18,9 +18,9 @@ jobs:
       run:
         shell: bash -ileo pipefail {0}
 
-    permissions: 
+    permissions: write-all
     # Additional permission needed to setup preview repo
-      contents: write
+      # contents: write
 
     steps:
       - name: Checkout Streamlit code
