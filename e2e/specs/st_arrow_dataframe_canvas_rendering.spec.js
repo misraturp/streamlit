@@ -43,7 +43,7 @@ describe("Interactive DataFrame canvas rendering", () => {
     matching to test that our table examples render correctly. In addition, glide-data-grid
     itself also has more advanced canvas based tests for some of the interactive features. */
     cy.viewport(3000, 768)
-    cy.get(".stDataFrameResizable").each((el, idx) => {
+    cy.get("[data-testid=\"stDataFrameResizable\"]").each((el, idx) => {
       cy.viewport(3000, 768)
       return cy.wrap(el).matchThemedSnapshots("data-grid-canvas-" + idx);
     });
