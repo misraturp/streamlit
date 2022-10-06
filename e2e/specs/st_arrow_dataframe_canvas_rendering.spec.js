@@ -16,6 +16,7 @@
 
 describe("Interactive DataFrame canvas rendering", () => {
   before(() => {
+    cy.viewport(3000, 768)
     // Increasing timeout since we're waiting for
     // dataframes and tables to be rendered.
     Cypress.config("defaultCommandTimeout", 30000);
@@ -28,6 +29,13 @@ describe("Interactive DataFrame canvas rendering", () => {
   });
 
   it("shows widget correctly", () => {
+
+
+    cy.get('body').trigger('keydown', { keyCode: 82});
+    cy.wait(500);
+
+    cy.viewport(3000, 768)
+
     cy.get(".stDataFrame").should("have.length", 28);
 
     /** Since glide-data-grid uses HTML canvas for rendering the table we
@@ -36,6 +44,7 @@ describe("Interactive DataFrame canvas rendering", () => {
     itself also has more advanced canvas based tests for some of the interactive features. */
     cy.viewport(3000, 768)
     cy.get(".stDataFrame").each((el, idx) => {
+      cy.viewport(3000, 768)
       return cy.wrap(el).matchThemedSnapshots("data-grid-canvas-" + idx);
     });
   });
