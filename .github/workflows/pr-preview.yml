@@ -10,6 +10,9 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+permissions:
+  contents: write
+
 jobs:
   pr-preview:
     runs-on: ubuntu-latest
@@ -72,8 +75,8 @@ jobs:
           PREVIEW_BRANCH: ${{ env.PREVIEW_BRANCH }}
           S3_URL: ${{ env.S3_URL }}
         run: |
-          git config --global user.email "core+streamlitbot-github@streamlit.io"
           git config --global user.name "Streamlit Bot"
+          git config --global user.email "core+streamlitbot-github@streamlit.io"
           git clone https://github.com/streamlit/core-previews.git
 
           cd core-previews
