@@ -80,14 +80,21 @@ jobs:
           git config --global user.email "core+streamlitbot-github@streamlit.io"
           git config --global user.name "Streamlit Bot"
 
+          echo "Config complete"
           git branch -D ${PREVIEW_BRANCH} &>/dev/null || true
+          echo "Branch Delete"
           git checkout -b ${PREVIEW_BRANCH}
+          echo "Branch Checkout"
 
-          cat ../S3_URL >> requirements.txt
+          cat ../${S3_URL} >> requirements.txt
+          echo "Create requirements file"
 
           git add .
+          echo "Add"
           git commit -m "Prepare core preview: ${PREVIEW_BRANCH}"
+          echo "Commit"
           git push -f origin ${PREVIEW_BRANCH}
+          echo "Push"
       - name: Ready to deploy!
         env:
           PREVIEW_BRANCH: ${{ env.PREVIEW_BRANCH }}
