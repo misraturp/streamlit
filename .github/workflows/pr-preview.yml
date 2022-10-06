@@ -67,11 +67,6 @@ jobs:
 
           cd ../..
           echo -e "S3_URL=https://core-previews.s3-us-west-2.amazonaws.com/${PREVIEW_BRANCH}/${WHEELFILE}" >> $GITHUB_ENV
-      - name: Checkout Core Previews Repo
-        uses: actions/checkout@v3
-        with: 
-          repository: 'streamlit/core-previews'
-          submodules: 'recursive'
       - name: Setup preview repo
         env:
           PREVIEW_BRANCH: ${{ env.PREVIEW_BRANCH }}
@@ -79,22 +74,17 @@ jobs:
         run: |
           git config --global user.email "core+streamlitbot-github@streamlit.io"
           git config --global user.name "Streamlit Bot"
+          git clone https://github.com/streamlit/core-previews.git
 
-          echo "Config complete"
+          cd core-previews
           git branch -D ${PREVIEW_BRANCH} &>/dev/null || true
-          echo "Branch Delete"
           git checkout -b ${PREVIEW_BRANCH}
-          echo "Branch Checkout"
 
           cat ../${S3_URL} >> requirements.txt
-          echo "Create requirements file"
 
           git add .
-          echo "Add"
           git commit -m "Prepare core preview: ${PREVIEW_BRANCH}"
-          echo "Commit"
           git push -f origin ${PREVIEW_BRANCH}
-          echo "Push"
       - name: Ready to deploy!
         env:
           PREVIEW_BRANCH: ${{ env.PREVIEW_BRANCH }}
