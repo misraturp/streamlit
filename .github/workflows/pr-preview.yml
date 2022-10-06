@@ -10,8 +10,8 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
-permissions:
-  contents: write
+# permissions:
+#   contents: write
 
 jobs:
   pr-preview:
@@ -87,7 +87,10 @@ jobs:
 
           git add .
           git commit -m "Prepare core preview: ${PREVIEW_BRANCH}"
-          git push -f origin ${PREVIEW_BRANCH}
+          echo "Remotes:"
+          git remote -v
+
+          git push -f ${PREVIEW_BRANCH}
       - name: Ready to deploy!
         env:
           PREVIEW_BRANCH: ${{ env.PREVIEW_BRANCH }}
