@@ -88,18 +88,15 @@ jobs:
         shell: bash -ileo pipefail {0}
     
     steps:
+      - name: Checkout Core Previews Repo
+        uses: actions/checkout@v3
+        with: 
+          repository: streamlit/core-previews
       - name: Setup preview repo
         env:
           PREVIEW_BRANCH: ${{ needs.pr-preview.output.preview-branch }}
           S3_URL: ${{ needs.pr-preview.output.s3-url }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          git config --global user.email "core+streamlitbot-github@streamlit.io"
-          git config --global user.name "Streamlit Bot"
-          git clone https://github.com/streamlit/core-previews.git
-          git remote set-url --push origin https://streamlitbot:$GITHUB_TOKEN@github.com/streamlit/core-previews.git
-
-          cd core-previews
           git branch -D "$PREVIEW_BRANCH" &>/dev/null || true
           git checkout -b "$PREVIEW_BRANCH"
 
@@ -110,6 +107,6 @@ jobs:
           git push -f origin ${PREVIEW_BRANCH}
       - name: Ready to deploy!
         env:
-          PREVIEW_BRANCH: ${{ env.PREVIEW_BRANCH }}
+          PREVIEW_BRANCH: ${{ needs.pr-preview.output.preview-branch }}
         run: |
           echo -e "https://share.streamlit.io/deploy?repository=streamlit/core-previews&branch=${PREVIEW_BRANCH}&mainModule=streamlit_app.py"
