@@ -75,8 +75,8 @@ jobs:
 
           cd ../..
           echo -e "S3_URL=https://core-previews.s3-us-west-2.amazonaws.com/${PREVIEW_BRANCH}/${WHEELFILE}" >> $GITHUB_ENV
-          echo "::set-output name=preview-branch::{$PREVIEW_BRANCH}"
-          echo "::set-output name=s3-url::{$S3_URL}"
+          echo "::set-output name=preview-branch::$PREVIEW_BRANCH"
+          echo "::set-output name=s3-url::$S3_URL"
 
   setup-preview:
     runs-on: ubuntu-latest
@@ -97,6 +97,9 @@ jobs:
           PREVIEW_BRANCH: ${{ needs.upload-whl.outputs.preview-branch }}
           S3_URL: ${{ needs.upload-whl.outputs.s3-url }}
         run: |
+          git config --global user.email "core+streamlitbot-github@streamlit.io"
+          git config --global user.name "Streamlit Bot"
+          git clone https://github.com/streamlit/core-previews.git
           git branch -D "$PREVIEW_BRANCH" &>/dev/null || true
           git checkout -b "$PREVIEW_BRANCH"
 
