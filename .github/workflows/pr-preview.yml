@@ -10,9 +10,6 @@ on:
 #   group: ${{ github.workflow }}-${{ github.ref }}
 #   cancel-in-progress: true
 
-# permissions:
-#   contents: write
-
 jobs:
   upload-whl:
     runs-on: ubuntu-latest
@@ -86,6 +83,10 @@ jobs:
     defaults:
       run:
         shell: bash -ileo pipefail {0}
+
+    permissions: write-all
+      # Additional permission needed to push repo
+      # contents: write
     
     steps:
       - name: Checkout Core Previews Repo
