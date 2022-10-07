@@ -74,10 +74,12 @@ jobs:
         env:
           PREVIEW_BRANCH: ${{ env.PREVIEW_BRANCH }}
           S3_URL: ${{ env.S3_URL }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git config user.name "Streamlit Bot"
           git config user.email "core+streamlitbot-github@streamlit.io"
           git clone https://github.com/streamlit/core-previews.git
+          git remote set-url --push origin https://streamlitbot:$GITHUB_TOKEN@github.com/streamlit/core-previews.git
 
           cd core-previews
           git branch -D "$PREVIEW_BRANCH" &>/dev/null || true
