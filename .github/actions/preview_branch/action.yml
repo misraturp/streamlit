@@ -23,7 +23,7 @@ runs:
         REF_TYPE: ${{ inputs.ref_type }}
         BRANCH_NAME: ${{ inputs.branch }}
       run: |
-        echo "PREVIEW_BRANCH=$(
+        PREVIEW_BRANCH=$(
           if [[ -n "$PR_NUMBER" ]]
           then
             echo "pr-$PR_NUMBER"
@@ -36,6 +36,8 @@ runs:
           else
             echo "main-preview"
           fi
-        )" >> $GITHUB_ENV
+        )
+        echo "PREVIEW_BRANCH=$PREVIEW_BRANCH" >> $GITHUB_ENV
+        echo "::set-output name=preview-branch::$PREVIEW_BRANCH"
         echo "BRANCH=$BRANCH_NAME" >> $GITHUB_ENV
       shell: bash -ileo pipefail {0}

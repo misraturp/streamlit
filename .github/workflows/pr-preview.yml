@@ -21,6 +21,10 @@ jobs:
       run:
         shell: bash -ileo pipefail {0}
 
+    outputs:
+      preview-branch: ${{ steps.preview-branch.outputs.preview-branch }}
+      s3-url: ${{ steps.s3.outputs.s3-url }}
+
     steps:
       - name: Checkout Streamlit code
         uses: actions/checkout@v3
@@ -40,12 +44,14 @@ jobs:
           BUILD_AS_FAST_AS_POSSIBLE=1 make package
       # Uses action to safely process user input (branch name) to prevent script injection attacks
       - name: Set Environment Variables
+        id: preview-branch
         uses: ./.github/actions/preview_branch
         with:
           pull_request_number: ${{ github.event.pull_request.number }}
           ref_type: ${{ github.ref_type }}
           branch: ${{ github.ref_name }}
       - name: Upload wheel to S3
+        id: s3
         env:
           BRANCH: ${{ env.BRANCH }}
           PREVIEW_BRANCH: ${{ env.PREVIEW_BRANCH }}
@@ -70,14 +76,26 @@ jobs:
 
           cd ../..
           echo -e "S3_URL=https://core-previews.s3-us-west-2.amazonaws.com/${PREVIEW_BRANCH}/${WHEELFILE}" >> $GITHUB_ENV
+          echo "::set-output name=s3-url::$S3_URL"
+
+  core-previews:
+    runs-on: ubuntu-latest
+
+    needs: pr-preview
+
+    defaults:
+      run:
+        shell: bash -ileo pipefail {0}
+    
+    steps:
       - name: Setup preview repo
         env:
-          PREVIEW_BRANCH: ${{ env.PREVIEW_BRANCH }}
-          S3_URL: ${{ env.S3_URL }}
+          PREVIEW_BRANCH: ${{ needs.pr-preview.output.preview-branch }}
+          S3_URL: ${{ needs.pr-preview.output.s3-url }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          git config user.email "core+streamlitbot-github@streamlit.io"
-          git config user.name "Streamlit Bot"
+          git config --global user.email "core+streamlitbot-github@streamlit.io"
+          git config --global user.name "Streamlit Bot"
           git clone https://github.com/streamlit/core-previews.git
           git remote set-url --push origin https://streamlitbot:$GITHUB_TOKEN@github.com/streamlit/core-previews.git
 
