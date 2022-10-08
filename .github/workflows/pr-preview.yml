@@ -68,8 +68,6 @@ jobs:
           S3_URL: ${{ env.S3_URL }}
           GITHUB_TOKEN: ${{ secrets.CORE_PREVIEWS_REPO_TOKEN }}
         run: |
-          git config --global user.email "core+streamlitbot-github@streamlit.io"
-          git config --global user.name "Streamlit Bot"
           git clone https://github.com/streamlit/core-previews.git
 
           cd core-previews
