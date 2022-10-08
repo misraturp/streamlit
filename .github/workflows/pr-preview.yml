@@ -83,16 +83,13 @@ jobs:
     defaults:
       run:
         shell: bash -ileo pipefail {0}
-
-    permissions: write-all
-      # Additional permission needed to push repo
-      # contents: write
     
     steps:
       - name: Checkout Core Previews Repo
         uses: actions/checkout@v3
         with: 
           repository: streamlit/core-previews
+          token: ${{ secrets.CORE_PREVIEWS_REPO_TOKEN }}
       - name: Setup preview repo
         env:
           PREVIEW_BRANCH: ${{ needs.upload-whl.outputs.preview-branch }}
