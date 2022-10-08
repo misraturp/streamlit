@@ -76,7 +76,7 @@ jobs:
           git branch -D ${PREVIEW_BRANCH} &>/dev/null || true
           git checkout -b ${PREVIEW_BRANCH}
 
-          cat ../S3_URL >> requirements.txt
+          echo "$S3_URL" >> requirements.txt
 
           git add .
           git commit -m "Prepare core preview: ${PREVIEW_BRANCH}"
