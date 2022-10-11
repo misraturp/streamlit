@@ -3,7 +3,7 @@ name: PR Preview
 on:
   push:
     branches:
-      - '**'
+      - 'develop'
 
 # Avoid duplicate workflows on same branch
 concurrency: 

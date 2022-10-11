@@ -1,10 +1,13 @@
 name: Nightly Build
 
-on:
+# on:
   # schedule:
   #   # Run job at 10.30pm PST or 11.30pm PDT
   #   - cron:  '30 6 * * *'
-  workflow_dispatch:
+on:
+  push:
+    branches:
+      - '**'
 
 jobs:
   # create-nightly-tag:
