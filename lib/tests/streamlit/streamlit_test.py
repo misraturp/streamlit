@@ -17,6 +17,7 @@
 import json
 import os
 import re
+import subprocess
 import sys
 import textwrap
 import unittest
@@ -155,6 +156,18 @@ class StreamlitTest(unittest.TestCase):
                 "set_option",
             },
         )
+
+    def test_aaa(self):
+        cwd = os.getcwd()
+        try:
+            # Run the script as a separate process to make sure that
+            # the currently loaded modules do not affect the test result.
+            output = subprocess.check_output(
+                [sys.executable, "-m", "pydoc", "streamlit"]
+            )
+            self.assertIn("Help on package streamlit:", output)
+        finally:
+            os.chdir(cwd)
 
 
 class StreamlitAPITest(testutil.DeltaGeneratorTestCase):
