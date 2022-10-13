@@ -13,6 +13,7 @@
 # limitations under the License.
 
 import os
+from typing import Optional
 
 import tornado.web
 
@@ -140,7 +141,7 @@ class HealthHandler(_SpecialRequestHandler):
         """
         self._callback = callback
 
-    async def get(self, endpoint: str = None):
+    async def get(self, endpoint: Optional[str] = None):
         if not endpoint.startswith("_stcore"):
             if "script-health-check" in endpoint:
                 LOGGER.warning(
