@@ -158,7 +158,7 @@ class StreamlitTest(unittest.TestCase):
             },
         )
 
-    def test_aaa(self):
+    def test_pydoc(self):
         cwd = os.getcwd()
         try:
             os.chdir(tempfile.mkdtemp())
