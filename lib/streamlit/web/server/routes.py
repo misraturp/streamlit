@@ -141,7 +141,7 @@ class HealthHandler(_SpecialRequestHandler):
         """
         self._callback = callback
 
-    async def get(self, endpoint: Optional[str] = None):
+    async def get(self, endpoint: str):
         if not endpoint.startswith("_stcore"):
             if "script-health-check" in endpoint:
                 LOGGER.warning(
