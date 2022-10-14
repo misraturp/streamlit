@@ -62,7 +62,7 @@ jobs:
   py_snowflake:
     runs-on: ubuntu-latest
 
-    if: github.repository == 'apache/airflow'
+    if: github.repository == 'streamlit/streamlit'
 
     steps:
       - name: Checkout Streamlit code
