@@ -16,14 +16,19 @@
 Global pytest fixtures. This file is automatically run by pytest before tests
 are executed.
 """
-
+import json
 import logging
 import os
+from pathlib import Path
 from unittest.mock import mock_open, patch
+
+import pytest
 
 # Do not import any Streamlit modules here! See below for details.
 
 os.environ["HOME"] = "/mock/home/folder"
+
+CREDENTIAL_DIR = Path(__file__).resolve().parents[2] / ".credentials"
 
 CONFIG_FILE_CONTENTS = """
 [global]
@@ -71,3 +76,62 @@ def pytest_sessionfinish():
     # To prevent the exception from being raised on pytest_sessionfinish
     # we disable exception raising in logging module
     logging.raiseExceptions = False
+
+
+def pytest_addoption(parser):
+    group = parser.getgroup("streamlit")
+
+    group.addoption(
+        "--require-snowflake",
+        action="store_true",
+        help="only run tests that requires snowflake. ",
+    )
+
+
+def pytest_runtest_setup(item):
+    is_require_snowflake = item.config.getoption("--require-snowflake")
+    has_require_snowflake_marker = bool(
+        list(item.iter_markers(name="require_snowflake"))
+    )
+
+    if is_require_snowflake and not has_require_snowflake_marker:
+        pytest.skip(
+            f"The test is skipped because it has require_snowflake marker. "
+            f"This tests are only run when --require-snowflake flag is passed to pytest. "
+            f"{item}"
+        )
+    if not is_require_snowflake and has_require_snowflake_marker:
+        pytest.skip(
+            f"The test is skipped because it does not have the right marker. "
+            f"Only tests marked with pytest.mark.require_snowflake() are run. {item}"
+        )
+
+
+@pytest.fixture(scope="session")
+def snowflake_connection():
+    import snowflake.connector
+
+    credential_file = CREDENTIAL_DIR / "snowflake.json"
+    if not credential_file.exists():
+        pytest.fail(f"Missing credential file: {credential_file}")
+    credential = json.loads(credential_file.read_text())
+    conn = snowflake.connector.connect(**credential)
+    try:
+        yield conn
+    finally:
+        conn.close()
+
+
+@pytest.fixture(scope="session")
+def snowpark_session():
+    from snowflake.snowpark import Session
+
+    credential_file = CREDENTIAL_DIR / "snowflake.json"
+    if not credential_file.exists():
+        pytest.fail(f"Missing credential file: {credential_file}")
+    credential = json.loads(credential_file.read_text())
+    session = Session.builder.configs(credential).create()
+    try:
+        yield session
+    finally:
+        session.close()
