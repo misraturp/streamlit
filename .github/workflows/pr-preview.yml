@@ -45,8 +45,8 @@ jobs:
       - name: Store Whl File
         uses: actions/upload-artifact@v3
         with:
-          name: whl_file
-          path: lib/dist
+          name: streamlit-11.11.11-py2.py3-none-any.whl
+          path: lib/dist/*.whl
       # Uses action to safely process user input (branch name) to prevent script injection attacks
       - name: Set Environment Variables
         uses: ./.github/actions/preview_branch
