@@ -62,7 +62,7 @@ jobs:
   py_snowflake:
     runs-on: ubuntu-latest
 
-    if: secrets.PARAMETERS_SECRET != ''
+    if: ${{ secrets.PARAMETERS_SECRET }} != ''
 
     steps:
       - name: Checkout Streamlit code
